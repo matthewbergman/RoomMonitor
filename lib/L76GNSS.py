@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+#
+# Copyright (c) 2019, Pycom Limited.
+#
+# This software is licensed under the GNU GPL version 3 or any
+# later version, with permitted additional terms. For more information
+# see the Pycom Licence v1.0 document supplied with this file, or
+# available at https://www.pycom.io/opensource/licensing
+#
+
 from machine import Timer
 import time
 import gc
@@ -56,6 +66,9 @@ class L76GNSS:
                 break
             nmea += self._read().lstrip(b'\n\n').rstrip(b'\n\n')
             gngll_idx = nmea.find(b'GNGLL')
+            gpgll_idx = nmea.find(b'GPGLL')
+            if gngll_idx < 0 and gpgll_idx >= 0:
+                gngll_idx = gpgll_idx
             if gngll_idx >= 0:
                 gngll = nmea[gngll_idx:]
                 e_idx = gngll.find(b'\r\n')

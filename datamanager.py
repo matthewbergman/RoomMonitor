@@ -4,7 +4,7 @@ import sys
 import logging
 
 import pycom
-from mqtt import MQTTClient
+from mqtt import MQTTClient2
 
 import config
 
@@ -54,7 +54,7 @@ class DataManager():
 
     def send_data(self, color):
         self.logger.debug(self.machine_name+" "+self.mqtt_server+" "+self.mqtt_user+" "+self.mqtt_password+" "+str(self.mqtt_port))
-        self.client = MQTTClient(self.machine_name, self.mqtt_server, user=self.mqtt_user, password=self.mqtt_password, port=self.mqtt_port)
+        self.client = MQTTClient2(self.machine_name, self.mqtt_server, user=self.mqtt_user, password=self.mqtt_password, port=self.mqtt_port)
         self.client.connect()
 
         try:
