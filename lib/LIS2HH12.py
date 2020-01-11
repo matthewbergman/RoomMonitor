@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+#
+# Copyright (c) 2019, Pycom Limited.
+#
+# This software is licensed under the GNU GPL version 3 or any
+# later version, with permitted additional terms. For more information
+# see the Pycom Licence v1.0 document supplied with this file, or
+# available at https://www.pycom.io/opensource/licensing
+#
+
 import math
 import time
 import struct
@@ -115,12 +125,12 @@ class LIS2HH12:
         self.act_dur = duration
 
         if threshold > self.SCALES[self.full_scale]:
-            error = "threshold %d exceeds full scale %d" % (thresold, self.SCALES[self.full_scale])
+            error = "threshold %d exceeds full scale %d" % (threshold, self.SCALES[self.full_scale])
             print(error)
             raise ValueError(error)
 
         if threshold < self.SCALES[self.full_scale] / 128:
-            error = "threshold %d below resolution %d" % (thresold, self.SCALES[self.full_scale]/128)
+            error = "threshold %d below resolution %d" % (threshold, self.SCALES[self.full_scale]/128)
             print(error)
             raise ValueError(error)
 
@@ -147,7 +157,7 @@ class LIS2HH12:
         self.int_pin = Pin('P13', mode=Pin.IN)
         self.int_pin.callback(trigger=Pin.IRQ_FALLING | Pin.IRQ_RISING, handler=self._int_handler)
 
-        # return actual used thresold and duration
+        # return actual used threshold and duration
         return (_ths * self.SCALES[self.full_scale] / 128, _dur * 8 * 1000 / self.ODRS[self.odr])
 
     def activity(self):
