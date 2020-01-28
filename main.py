@@ -68,10 +68,13 @@ try:
         comms.disconnect()
         pycom.rgbled(0x0000FF)
         time.sleep(2)
+        pycom.rgbled(0x000000)
+
     if not manager.send_data(comms.get_active_manager()):
         comms.disconnect()
         pycom.rgbled(0xFF00FF)
         time.sleep(2)
+
 except KeyboardInterrupt:
     manager.disconnect()
     comms.disconnect()
@@ -94,7 +97,7 @@ finally:
     time.sleep(5)
     pycom.rgbled(0x000000)
 
-
-py.setup_int_pin_wake_up(False)
-py.setup_sleep(300)
-py.go_to_sleep()
+if config.manager_interval == 0:
+    py.setup_int_pin_wake_up(False)
+    py.setup_sleep(300)
+    py.go_to_sleep()
