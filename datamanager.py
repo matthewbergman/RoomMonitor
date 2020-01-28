@@ -57,8 +57,8 @@ class DataManager():
         self.client = MQTTClient2(self.machine_name, self.mqtt_server, user=self.mqtt_user, password=self.mqtt_password, port=self.mqtt_port)
         self.client.connect()
 
-        try:
-            while True:
+        while True:
+            try:
                 if color == 0:
                     pycom.rgbled(0x00FF00)
                 else:
@@ -74,22 +74,26 @@ class DataManager():
 
                 pycom.rgbled(0x000000)
 
-                #client.check_msg()
                 if self.interval == 0:
                     self.client.disconnect()
                     break
 
-                time.sleep(self.interval)
-        except KeyboardInterrupt:
-            try:
-                sys.exit(0)
-            except:
-                return False
-        except Exception as exc:
-            self.logger.exception('send_data')
-            return False
-
-        return True
+                counter = 0
+                while counter < self.interval:
+                    self.client.check_msg()
+                    if counter % 10 == 0:
+                        self.client.ping()
+                    counter += 1
+                    time.sleep(1)
+            except KeyboardInterrupt:
+                try:
+                    sys.exit(0)
+                except:
+                    return False
+            except Exception as exc:
+                self.logger.exception('send_data')
+                self.client.connect()
+                continue
 
     def sub_cb(self, topic, msg):
        self.logger.debug(topic+": "+msg)
