@@ -57,7 +57,7 @@ class MQTTClient2:
         self.lw_qos = qos
         self.lw_retain = retain
 
-    def connect(self, clean_session=True):
+    def connect(self, clean_session=False):
         addr = socket.getaddrinfo(self.server, self.port)[0][-1]
         self.sock = socket.socket()
         self.sock.connect(addr)
